@@ -66,11 +66,24 @@ function aumento() {
 }
 
 
+
 function gestorGastos() {
-    let correr = true
+    let correr = true;
     while (correr) {
         let descripcion = prompt("Ingrese la descripción de la compra:");
-        let monto = parseFloat(prompt("Ingrese el monto de la compra:"));
+        if (!validarPalabra(descripcion)) {
+            alert("La descripción debe contener solo letras y espacios.");
+            console.log("La descripción debe contener solo letras y espacios.");
+            continue;
+        }
+
+        let monto = obtenerMonto();
+        if (monto === null) {
+            alert("El monto debe ser un número válido mayor que cero.");
+            console.log("El monto debe ser un número válido mayor que cero.");
+            continue;
+        }
+
         let metodoPago = obtenerMetodoPago();
         let fecha = new Date();
         let gasto = {
@@ -97,6 +110,24 @@ function gestorGastos() {
         }
     }
 }
+function validarPalabra(descripcion) {
+    return /^[a-zA-Z\s]+$/.test(descripcion);
+}
+
+function obtenerMonto() {
+    let monto;
+    while (true) {
+        monto = parseFloat(prompt("Ingrese el monto de la compra:"));
+
+        if (isNaN(monto) || monto <= 0) {
+            alert("El monto debe ser un número válido mayor que cero.");
+        } else {
+            break;
+        }
+    }
+    return monto;
+};
+
 function obtenerMetodoPago() {
     let metodoPago;
     do {
