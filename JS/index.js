@@ -68,8 +68,7 @@ function aumento() {
 
 
 function gestorGastos() {
-    let correr = true;
-    while (correr) {
+    while (true) {
         let descripcion = prompt("Ingrese la descripción de la compra:");
         if (!validarPalabra(descripcion)) {
             alert("La descripción debe contener solo letras y espacios.");
@@ -95,25 +94,28 @@ function gestorGastos() {
 
         gastosArray.push(gasto);
         console.log(gastosArray);
-        correr = prompt(`Quieres agregar otro gasto?
-        Si - Ingresar otro gasto
-        No - Volver al menu principal`).toLowerCase();
 
-        if (correr === 'si') { correr = true; }
-        else if (correr === 'no') {
-            correr = false;
-            console.log("Volver al menu principal ");
+        let otroGasto = prompt(`Quieres agregar otro gasto?
+Si - Ingresar otro gasto
+No - Volver al menú principal`).toLowerCase();
+
+        if (otroGasto !== 'si' && otroGasto !== 'no') {
+            alert("Respuesta inválida. Por favor, ingresa 'si' o 'no'.");
+            otroGasto = prompt(`Quieres agregar otro gasto?
+Si - Ingresar otro gasto
+No - Volver al menú principal`).toLowerCase();
+        } else if (otroGasto === 'no') {
+            console.log("Volver al menú principal");
             menuPrincipal();
-        }
-        else {
-            alert("Lo siento, solo puedes ingresar si o no");
+            break;
         }
     }
-}
+};
+console.log(gastosArray);
 function validarPalabra(descripcion) {
     return /^[a-zA-Z\s]+$/.test(descripcion);
 }
-
+// Obtiene monto lo valida y si es correcto lo envia a monto para el array
 function obtenerMonto() {
     let monto;
     while (true) {
@@ -127,7 +129,7 @@ function obtenerMonto() {
     }
     return monto;
 };
-
+// Obtiene monto lo valida y si es correcto lo envia a metodo para el array
 function obtenerMetodoPago() {
     let metodoPago;
     do {
@@ -150,72 +152,119 @@ function obtenerMetodoPago() {
 }
 
 menuPrincipal();
-function mostrarGastos(gastos) {
-    if (gastos.length === 0) {
-        alert("No hay gastos registrados. Agrega gastos para ver la información.");
-        return; // Salir de la función si no hay gastos
-    }
 
-    console.log("Lista de todos los gastos:");
-    for (let i = 0; i < gastos.length; i++) {
-        let gasto = gastos[i];
-        console.log(`Descripción: ${gasto.descripcion}`);
-        console.log(`Monto: ${gasto.monto}`);
-        console.log(`Método de pago: ${gasto.metodo}`);
-        console.log(`Fecha: ${gasto.fecha}`);
-        console.log("----");
+function mostrarGastos(gastosArray) {
+    if (gastosArray.length === 0) {
+        alert("No hay gastos registrados. Agrega gastos para ver la información.");
+        return;
+    } else {
+        recorrerArray(gastosArray);
     }
 
     let opcionesFiltro = [
         "Filtrar por descripción",
+        "Filtrar por método de pago",
         "Mostrar todos los gastos",
         "Volver al menú principal"
     ];
 
-    let opcionSeleccionada = prompt(`Opciones de filtrado:\n\n1 - ${opcionesFiltro[0]}\n2 - ${opcionesFiltro[1]}\n3 - ${opcionesFiltro[2]}`);
+    let opcionSeleccionada = prompt(`Opciones de filtrado:\n\n1 - ${opcionesFiltro[0]}\n2 - ${opcionesFiltro[1]}\n3 - ${opcionesFiltro[2]}\n4 - ${opcionesFiltro[3]}`);
 
     switch (opcionSeleccionada) {
         case "1":
-            let descripcionBusqueda = prompt("Ingrese la descripción para filtrar los gastos:");
-            mostrarGastosFiltrados(gastos, descripcionBusqueda);
+            mostrarOpcionesDescripciones(gastosArray);
             break;
 
         case "2":
-            console.log("Mostrar todos los gastos:");
-            for (let i = 0; i < gastos.length; i++) {
-                let gasto = gastos[i];
-                console.log(`Descripción: ${gasto.descripcion}`);
-                console.log(`Monto: ${gasto.monto}`);
-                console.log(`Método de pago: ${gasto.metodo}`);
-                console.log(`Fecha: ${gasto.fecha}`);
-                console.log("----");
-            }
+            mostrarOpcionesMetodoPago(gastosArray);
+            break;
+
+        case "3":
+            mostrarGastosFiltrados(gastosArray, null, null);
             break;
 
         default:
             alert("Volviendo al menú principal.");
+            menuPrincipal();
             break;
+    }
+};
+
+function mostrarOpcionesDescripciones(gastosArray) {
+    let descripciones = gastosArray.map(gasto => gasto.descripcion);
+    let opcionesDescripciones = [...new Set(descripciones)]; // Eliminar duplicados
+
+    let descripcionSeleccionada = prompt(`Opciones de filtrado por descripción:\n\n${opcionesDescripciones.join('\n')}`);
+
+    if (opcionesDescripciones.includes(descripcionSeleccionada)) {
+        mostrarGastosFiltrados(gastosArray, descripcionSeleccionada, null);
+    } else {
+        alert("Descripción inválida. Volviendo al menú principal.");
     }
 }
 
-function mostrarGastosFiltrados(gastos, descripcionBusqueda) {
-    let gastosFiltrados = gastos.filter(gasto => gasto.descripcion.toLowerCase().includes(descripcionBusqueda.toLowerCase()));
+function mostrarOpcionesMetodoPago(gastosArray) {
+    let metodosPago = gastosArray.map(gasto => gasto.metodo);
+    let opcionesMetodosPago = [...new Set(metodosPago)]; // Eliminar duplicados
+
+    let metodoPagoSeleccionado = prompt(`Opciones de filtrado por método de pago:\n\n${opcionesMetodosPago.join('\n')}`);
+
+    if (opcionesMetodosPago.includes(metodoPagoSeleccionado)) {
+        mostrarGastosFiltrados(gastosArray, null, metodoPagoSeleccionado);
+    } else {
+        alert("Método de pago inválido. Volviendo al menú principal.");
+    }
+}
+function recorrerArray(gastosArray) {
+    for (const gasto of gastosArray) {
+        console.log(`Descripción: ${gasto.descripcion}`);
+        console.log(`Monto: $ ${gasto.monto}`);
+        console.log(`Método de pago: ${gasto.metodo}`);
+        console.log(`Fecha: ${gasto.fecha}`);
+        console.log("----");
+    }
+}
+
+function mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusqueda) {
+    let gastosFiltrados = gastosArray.filter(gasto => {
+        let matchDescripcion = true;
+        let matchMetodoPago = true;
+
+        if (descripcionBusqueda) {
+            matchDescripcion = gasto.descripcion.toLowerCase().includes(descripcionBusqueda.toLowerCase());
+        }
+
+        if (metodoPagoBusqueda) {
+            matchMetodoPago = gasto.metodo.toLowerCase() === metodoPagoBusqueda.toLowerCase();
+        }
+
+        return matchDescripcion && matchMetodoPago;
+    });
 
     if (gastosFiltrados.length === 0) {
-        alert(`No se encontraron gastos para la descripción "${descripcionBusqueda}".`);
-        return; // Salir de la función si no hay gastos filtrados
+        alert("No se encontraron gastos con los filtros seleccionados.");
+        return;
     }
 
-    let mensaje = `Lista de gastos para la descripción "${descripcionBusqueda}":\n\n`;
+    let totalGastos = 0;
+    let mensaje = "Lista de gastos:\n\n";
 
-    for (let i = 0; i < gastosFiltrados.length; i++) {
-        let gasto = gastosFiltrados[i];
+    for (const gasto of gastosFiltrados) {
         mensaje += `Descripción: ${gasto.descripcion}\n`;
-        mensaje += `Monto: ${gasto.monto}\n`;
+        mensaje += `Monto: $ ${gasto.monto}\n`;
         mensaje += `Método de pago: ${gasto.metodo}\n`;
         mensaje += `Fecha: ${gasto.fecha}\n`;
         mensaje += "----\n";
+        totalGastos += gasto.monto; // Acumulamos los montos
     }
+
+    mensaje += `Total de gastos: $ ${totalGastos}`;
 
     alert(mensaje);
 }
+
+
+
+
+// Llamar a la función principal con el array de gastos
+mostrarGastos(gastosArray);
