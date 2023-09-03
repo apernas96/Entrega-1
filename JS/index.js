@@ -89,7 +89,7 @@ function gestorGastos() {
             descripcion: descripcion,
             monto: monto,
             metodo: metodoPago,
-            fecha: fecha,
+            fecha: changeDateFormat(fecha),
         }
 
         gastosArray.push(gasto);
@@ -263,6 +263,20 @@ function mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusq
     alert(mensaje);
 }
 
+
+//create a function that will recieve the date of gasto and change it to dd/mm/aaaa formating
+function changeDateFormat(fecha) {
+    // this function reciever a date objets and converts it to a string like dd/mm/yyyy
+    let day = fecha.getDate();
+    let month = fecha.getMonth() + 1;
+    let year = fecha.getFullYear();
+    //now make it a padstart so a day or month with a single digit will be shown as a 0
+    day = day.toString().padStart(2, "0");
+    month = month.toString().padStart(2, "0");
+    //now return the string in the required format
+
+    return `${day}/${month}/${year}`;
+};
 
 
 
