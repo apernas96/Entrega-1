@@ -1,8 +1,8 @@
-let nombre = prompt("Ingrese aquí su nombre:");
-let condicionCierre = false;
+/* let nombre = prompt("Ingrese aquí su nombre:");
+let condicionCierre = false; */
 let gastosArray = [];
 
-function menuPrincipal() {
+/* function menuPrincipal() {
     while (!condicionCierre) {
         let eleccion = parseInt(prompt(`Hola ${nombre}, ¿en qué puedo ayudarte hoy?
 Las funciones permitidas son:
@@ -40,17 +40,21 @@ Las funciones permitidas son:
                 break;
         }
     }
-}
-menuPrincipal();
+} */
+const formularioAumento = document.getElementById("formularioAumento");
+const sueldoEl = document.getElementById("sueldo-el");
+const mesesEl = document.getElementById("meses-el");
+
 function aumento() {
-    let sueldoActual = parseFloat(prompt("Ingrese su sueldo actual:"));
+    let sueldoActual = parseFloat(sueldoEl.value);
     let mesesSinaumento;
     const inflacion = [8, 7, 6, 9, 11, 10, 8, 5, 7, 13, 15, 9];
 
     do {
-        mesesSinaumento = parseInt(prompt("Cuantos meses hace que no te aumetan?"));
+        mesesSinaumento = parseFloat(mesesEl.value);
         if (mesesSinaumento > 12 || mesesSinaumento <= 0) {
             alert("Lo siento, solo podes ingresar un numero de meses entre 1 y 12");
+            break;
         }
     }
     while (mesesSinaumento > 12 || mesesSinaumento <= 0);
@@ -62,11 +66,14 @@ function aumento() {
         nuevoSueldo = (1 + tasaDecimal) * nuevoSueldo;
         console.log(`indice:${i} , interes${nuevoSueldo}`);
     }
-    alert(`Tu sueldo actualizado a la inflacion de los ultimos ${mesesSinaumento} meses deberia ser de ${nuevoSueldo.toFixed(2)}.`);
+    document.getElementById("sueldoActualizado").innerHTML = (`Tu sueldo actualizado a la inflacion de los ultimos ${mesesSinaumento} meses deberia ser de  $${nuevoSueldo.toFixed(2)} por mes.`);
 }
+formularioAumento.addEventListener("submit", function (e) {
+    e.preventDefault(); // Evitar que el formulario se envíe
+    aumento();
+});
 
-
-
+/*
 function gestorGastos() {
     while (true) {
         let descripcion = prompt("Ingrese la descripción de la compra:");
@@ -106,9 +113,9 @@ Si - Ingresar otro gasto
 No - Volver al menú principal`).toLowerCase();
         } else if (otroGasto === 'no') {
             console.log("Volver al menú principal");
-            menuPrincipal();
+            //amenuPrincipal();
             break;
-        }
+        }a
     }
 };
 console.log(gastosArray);
@@ -151,7 +158,7 @@ function obtenerMetodoPago() {
     }
 }
 
-menuPrincipal();
+
 
 function mostrarGastos(gastosArray) {
     if (gastosArray.length === 0) {
@@ -282,3 +289,4 @@ function changeDateFormat(fecha) {
 
 // Llamar a la función principal con el array de gastos
 mostrarGastos(gastosArray);
+ */

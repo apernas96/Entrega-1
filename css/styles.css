@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: 'Nunito', sans-serif;
+    font-size: 62.5%;
+}
+
+nav {
+    font-size: 2rem;
+}
+
+.fondoGris {
+    background-color: #262626;
+}
+
+.elementoNav {
+    color: white;
+}
+
+.active {
+    color: goldenrod;
+}
