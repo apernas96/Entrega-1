@@ -9,6 +9,18 @@ html {
     font-size: 62.5%;
 }
 
+body {
+    background-color: lightgreen;
+}
+
+.container {
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: white;
+    max-width: 500px;
+    padding: 10px;
+}
+
 nav {
     font-size: 2rem;
 }
