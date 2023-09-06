@@ -18,28 +18,6 @@
 </head>
 
 <body>
-    <!--     <header class="col-md-12 fondoGris">
-        <nav class="navbar navbar-expand-lg">
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center col-md-6" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active mr-10 ml-10">
-                        <a class="nav-link elementoNav" href="index.html">Inicio</a>
-                    </li>
-                    <li class="nav-item mr-10 ml-10">
-                        <a class="nav-link elementoNav" href="./html/sueldo.html">Calcula tu sueldo</a>
-                    </li>
-                    <li class="nav-item mr-10 ml-10">
-                        <a class="nav-link elementoNav" href="./html/gestor.html">Gestiona tus gastos</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header> -->
 
     <main>
         <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
@@ -112,20 +90,18 @@
                     </div>
                 </form>
             </div>
-            <!--             <div id="mensajeGastoAgregado" class="alert alert-success d-flex justify-content-center mt-3"
-                style="display: none;">
-                Gasto Agregado
-            </div> -->
+
         </section>
         <section class="d-flex justify-content-center">
             <div class="container row mt-5">
-                <!-- ... (tus formularios existentes) ... -->
 
                 <h2>Gastos Registrados</h2>
                 <div class="form-group mt-4">
                     <label for="descripcionBusqueda">Filtrar por Descripción:</label>
-                    <input type="text" class="form-control" id="descripcionBusqueda"
-                        placeholder="Ingrese una descripción">
+                    <select class="form-control" id="descripcionBusqueda">
+                        <option value="">Seleccionar descripción</option>
+                        <!-- Las opciones se llenarán automáticamente desde JavaScript -->
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="metodoPagoBusqueda">Filtrar por Método de Pago:</label>
@@ -147,6 +123,7 @@
                             <th>Monto</th>
                             <th>Método de Pago</th>
                             <th>Fecha</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="tablaGastosBody">

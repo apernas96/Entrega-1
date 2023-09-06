@@ -39,39 +39,42 @@ formularioAumento.addEventListener("submit", function (e) {
     }
 });
 
-
+// Trae los elementos del HTML
 const formularioGastos = document.getElementById("formularioGastos");
 console.log(formularioGastos);
+
 const descripcionEl = document.getElementById("descripcion-el");
-// console.log(descripcion);
+;
 const montoEl = document.getElementById("monto-el");
-// console.log(monto);
+
 const metodoPagoEl = document.getElementById("metodoPago-el");
-// console.log(metodoPago);
+
 
 let gastosArray = [];
+let descripcionesUnicas = [];
 
 function gestorGastos() {
 
 
     let descripcion = descripcionEl.value;
     if (!validarPalabra(descripcion)) {
-        return; // Sal del flujo si hay un error
+        return; // Sale del flujo si hay un error
     }
 
     let monto = obtenerMonto();
     if (monto === null) {
-        return; // Sal del flujo si hay un error
+        return; // Sale del flujo si hay un error
     }
 
     let metodoPago = obtenerMetodoPago();
     if (metodoPago === null) {
-        return; // Sal del flujo si hay un error
+        return; // Sale del flujo si hay un error
     }
 
     let fecha = new Date();
 
     let gasto = {
+        id: generarIdUnico(),
         descripcion: descripcion,
         monto: monto,
         metodo: metodoPago,
@@ -79,12 +82,36 @@ function gestorGastos() {
     };
 
     gastosArray.push(gasto);
+    if (!descripcionesUnicas.includes(descripcion)) {
+        descripcionesUnicas.push(descripcion);
+        actualizarListaDesplegable(descripcionesUnicas);
+    }
+    guardarEnLocalStorage();
     console.log(gastosArray);
     mostrarGastosFiltrados(gastosArray, null, null)
 
 };
 
+function actualizarListaDesplegable(descripciones) {
+    const descripcionBusquedaEl = document.getElementById("descripcionBusqueda");
+    descripcionBusquedaEl.innerHTML = ""; // Limpia la lista desplegable
 
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.text = "Seleccionar descripción";
+    descripcionBusquedaEl.appendChild(defaultOption);
+
+    for (const descripcion of descripciones) {
+        const option = document.createElement("option");
+        option.value = descripcion;
+        option.text = descripcion;
+        descripcionBusquedaEl.appendChild(option);
+    }
+}
+
+function generarIdUnico() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
 
 function mostrarError(mensaje) {
     const errorModalBody = document.getElementById("errorModalBody");
@@ -162,6 +189,8 @@ function mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusq
     });
 
     if (gastosFiltrados.length === 0) {
+        let tablaGastosBody = document.getElementById("tablaGastosBody");
+        tablaGastosBody.innerHTML = "";
         alert("No se encontraron gastos con los filtros seleccionados.");
         return;
     }
@@ -177,11 +206,17 @@ function mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusq
             <td>$ ${gasto.monto}</td>
             <td>${gasto.metodo}</td>
             <td>${gasto.fecha}</td>
+            <td><button class="btn btn-danger btn-sm" data-gasto-id="${gasto.id}">Eliminar</button></td>
         `;
         tablaGastosBody.appendChild(row);
 
 
         totalGastos += parseFloat(gasto.monto); // Sumar el monto del gasto al total
+        const eliminarBoton = row.querySelector("button");
+        eliminarBoton.addEventListener("click", function () {
+            const gastoId = this.getAttribute("data-gasto-id");
+            eliminarGasto(gastoId);
+        });
     }
 
 
@@ -189,10 +224,61 @@ function mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusq
     const totalGastosElement = document.getElementById("totalGastos");
     totalGastosElement.textContent = `Total de gastos: $ ${totalGastos.toFixed(2)}`;
 };
+
+function eliminarGasto(gastoId) {
+    console.log(gastoId);
+
+    // Filtrar el array de gastos para eliminar el gasto con el ID correspondiente
+    gastosArray = gastosArray.filter(gasto => gasto.id !== gastoId);
+    console.log(gastosArray);
+    mostrarGastosFiltrados(gastosArray, null, null);
+
+    // Actualizar el total de gastos después de eliminar un gasto
+    actualizarTotalGastos();
+    guardarEnLocalStorage();
+}
+
+function guardarEnLocalStorage() {
+    // Convierte el arreglo gastosArray a JSON
+    const datosJSON = JSON.stringify(gastosArray);
+
+    // Guarda los datos JSON en LocalStorage bajo una clave específica
+    localStorage.setItem('mis_gastos', datosJSON);
+};
+
+function actualizarTotalGastos() {
+    let totalGastos = 0;
+    for (const gasto of gastosArray) {
+        totalGastos += parseFloat(gasto.monto);
+    }
+
+    const totalGastosElement = document.getElementById("totalGastos");
+    totalGastosElement.textContent = `Total de gastos: $ ${totalGastos.toFixed(2)}`;
+};
+
 const btnFiltrar = document.getElementById("btn-filtrar");
 btnFiltrar.addEventListener("click", function () {
     const descripcionBusqueda = document.getElementById("descripcionBusqueda").value;
     const metodoPagoBusqueda = document.getElementById("metodoPagoBusqueda").value;
 
     mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusqueda);
+});
+
+window.addEventListener("load", function cargarDesdeLocalStorage() {
+    const datosJSON = localStorage.getItem('mis_gastos');
+
+    if (datosJSON) {
+        // Si se encuentran datos en LocalStorage, conviértelos de JSON a un arreglo
+        gastosArray = JSON.parse(datosJSON);
+
+        gastosArray.forEach(gasto => {
+            const descripcion = gasto.descripcion;
+            if (!descripcionesUnicas.includes(descripcion)) {
+                descripcionesUnicas.push(descripcion);
+                actualizarListaDesplegable(descripcionesUnicas);
+            }
+        });
+        // Actualiza la lista desplegable y muestra los gastos filtrados
+        mostrarGastosFiltrados(gastosArray, null, null);
+    }
 });
