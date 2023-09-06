@@ -15,13 +15,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,900&display=swap"
         rel="stylesheet">
-
 </head>
 
 <body>
-    <header class="col-md-12 fondoGris">
+    <!--     <header class="col-md-12 fondoGris">
         <nav class="navbar navbar-expand-lg">
-            <!-- <a class="navbar-brand" href="#">Maneja tu economia</a> -->
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,8 +39,26 @@
                 </ul>
             </div>
         </nav>
-    </header>
+    </header> -->
+
     <main>
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="errorModalLabel">Error</h3>
+
+                    </div>
+                    <h3 class="modal-body" id="errorModalBody">
+                        <!-- Aquí se mostrará el mensaje de error -->
+                    </h3>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section class="d-flex justify-content-center">
             <div class="container row mt-5">
 
@@ -94,8 +111,52 @@
                         <button type="submit" class="btn btn-primary col-md-9" id="btn-gasto">Agregar Gasto</button>
                     </div>
                 </form>
+            </div>
+            <!--             <div id="mensajeGastoAgregado" class="alert alert-success d-flex justify-content-center mt-3"
+                style="display: none;">
+                Gasto Agregado
+            </div> -->
         </section>
-        </div>
+        <section class="d-flex justify-content-center">
+            <div class="container row mt-5">
+                <!-- ... (tus formularios existentes) ... -->
+
+                <h2>Gastos Registrados</h2>
+                <div class="form-group mt-4">
+                    <label for="descripcionBusqueda">Filtrar por Descripción:</label>
+                    <input type="text" class="form-control" id="descripcionBusqueda"
+                        placeholder="Ingrese una descripción">
+                </div>
+                <div class="form-group">
+                    <label for="metodoPagoBusqueda">Filtrar por Método de Pago:</label>
+                    <select class="form-control" id="metodoPagoBusqueda">
+                        <option value="">Seleccionar método de pago</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Debito">Débito</option>
+                        <option value="Credito">Crédito</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="col-md-12 d-flex justify-content-center mt-3">
+                    <button type="button" class="btn btn-primary col-md-9" id="btn-filtrar">Filtrar Gastos</button>
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Monto</th>
+                            <th>Método de Pago</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaGastosBody">
+                        <!-- Aquí se llenarán los datos de los gastos -->
+                    </tbody>
+                </table>
+                <p id="totalGastos" class="mt-3">Total de gastos: $ 0.00</p>
+            </div>
+        </section>
+
     </main>
     <footer>
 

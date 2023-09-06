@@ -73,7 +73,7 @@ formularioAumento.addEventListener("submit", function (e) {
     aumento();
 });
 
-/*
+
 function gestorGastos() {
     while (true) {
         let descripcion = prompt("Ingrese la descripción de la compra:");
@@ -115,7 +115,7 @@ No - Volver al menú principal`).toLowerCase();
             console.log("Volver al menú principal");
             //amenuPrincipal();
             break;
-        }a
+        } a
     }
 };
 console.log(gastosArray);
@@ -289,4 +289,4 @@ function changeDateFormat(fecha) {
 
 // Llamar a la función principal con el array de gastos
 mostrarGastos(gastosArray);
- */
+ * /

@@ -36,3 +36,10 @@ nav {
 .active {
     color: goldenrod;
 }
+
+.btn-success {
+    background-color: #28a745;
+
+    border-color: #28a745;
+    color: black;
+}
