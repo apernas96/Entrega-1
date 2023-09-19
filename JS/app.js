@@ -4,10 +4,11 @@ const formularioAumento = document.getElementById("formularioAumento");
 const sueldoEl = document.getElementById("sueldo-el");
 const mesesEl = document.getElementById("meses-el");
 
+let inflacion = []; //[8, 7, 6, 9, 11, 10, 8, 5, 7, 13, 15, 9]
+
 function aumento() {
     let sueldoActual = parseFloat(sueldoEl.value);
     let mesesSinaumento;
-    const inflacion = [8, 7, 6, 9, 11, 10, 8, 5, 7, 13, 15, 9];
 
     do {
         mesesSinaumento = parseFloat(mesesEl.value);
@@ -31,12 +32,9 @@ formularioAumento.addEventListener("submit", function (e) {
     e.preventDefault();
     const sueldoValue = parseFloat(sueldoEl.value);
     const mesesValue = parseFloat(mesesEl.value);
-    if (isNaN(sueldoValue) || isNaN(mesesValue)) {
-        mostrarError("Debes completar todos los campos");
-        return
-    } else {
-        aumento();
-    }
+
+    //ternario para mostar error
+    (isNaN(sueldoValue) || isNaN(mesesValue)) ? mostrarError("Debes completar todos los campos") : aumento();
 });
 
 // Trae los elementos del HTML
@@ -87,6 +85,8 @@ function gestorGastos() {
         actualizarListaDesplegable(descripcionesUnicas);
     }
     guardarEnLocalStorage();
+    lanzarToast('Se ha agregado un nuevo gasto')
+
     console.log(gastosArray);
     mostrarGastosFiltrados(gastosArray, null, null)
 
@@ -236,6 +236,8 @@ function eliminarGasto(gastoId) {
     // Actualizar el total de gastos después de eliminar un gasto
     actualizarTotalGastos();
     guardarEnLocalStorage();
+    //mostrar toast
+    lanzarToast('Se ha eliminado un gasto')
 }
 
 function guardarEnLocalStorage() {
@@ -244,7 +246,19 @@ function guardarEnLocalStorage() {
 
     // Guarda los datos JSON en LocalStorage bajo una clave específica
     localStorage.setItem('mis_gastos', datosJSON);
+
 };
+
+function lanzarToast(mensaje) {
+    Toastify({
+        text: mensaje,
+        duration: 3000,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+    }).showToast();
+}
 
 function actualizarTotalGastos() {
     let totalGastos = 0;
@@ -264,8 +278,25 @@ btnFiltrar.addEventListener("click", function () {
     mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusqueda);
 });
 
+
+async function obtenerDatos() {
+    const cantidadDatos = 12;
+    try {
+        const url = `https://apis.datos.gob.ar/series/api/series/?ids=173.1_INUCLEOLEO_DIC-_0_10&limit=${cantidadDatos}&sort=desc`;
+        const response = await fetch(url);
+        const dataJson = await response.json();
+        const { data } = dataJson;
+        inflacion = data.map(([fecha, ipc]) => ipc * 100) //destructuro el elemento del map para usar solo su segunda posicion del array
+        console.log(inflacion)
+    } catch (error) {
+        lanzarToast('Se genero un error al intentar llegar a la api')
+    }
+}
+
 window.addEventListener("load", function cargarDesdeLocalStorage() {
     const datosJSON = localStorage.getItem('mis_gastos');
+
+    obtenerDatos();
 
     if (datosJSON) {
         // Si se encuentran datos en LocalStorage, conviértelos de JSON a un arreglo
