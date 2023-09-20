@@ -4,7 +4,7 @@ const formularioAumento = document.getElementById("formularioAumento");
 const sueldoEl = document.getElementById("sueldo-el");
 const mesesEl = document.getElementById("meses-el");
 
-let inflacion = []; //[8, 7, 6, 9, 11, 10, 8, 5, 7, 13, 15, 9]
+let inflacion = [];
 
 function aumento() {
     let sueldoActual = parseFloat(sueldoEl.value);
@@ -188,10 +188,10 @@ function mostrarGastosFiltrados(gastosArray, descripcionBusqueda, metodoPagoBusq
         return matchDescripcion && matchMetodoPago;
     });
 
-    if (gastosFiltrados.length === 0) {
+    if (gastosFiltrados.length === 0 && gastosArray.length !== 0) {
         let tablaGastosBody = document.getElementById("tablaGastosBody");
         tablaGastosBody.innerHTML = "";
-        alert("No se encontraron gastos con los filtros seleccionados.");
+        lanzarToast("No se encontraron gastos con los filtros seleccionados.");
         return;
     }
 

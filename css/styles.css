@@ -10,7 +10,8 @@ html {
 }
 
 body {
-    background-color: lightgreen;
+
+    background-image: url('../multimedia/carbon_fibre.webp');
 }
 
 .container {
